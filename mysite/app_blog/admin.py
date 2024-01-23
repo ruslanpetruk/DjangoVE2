@@ -1,20 +1,20 @@
+# Register your models here.
+# admin.site.register(Article)
+
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
 
 from .models import Article, ArticleImage, Category
 from .forms import ArticleImageForm
 
 class CategoryAdmin(admin.ModelAdmin):
- list_display = ('category',)
-#  fieldsets = (
-#   ('', {
-#    'fields': ('category', ),
-#   }),
-#  )
- prepopulated_fields={'slug':('category',)}
- 
+    list_display = ('category',)
+    prepopulated_fields = {'slug': ('category',)}  # автозаповнення для slug
+
 admin.site.register(Category, CategoryAdmin)
+
 
 class ArticleImageInline(admin.TabularInline):
  model = ArticleImage
@@ -27,7 +27,7 @@ class ArticleImageInline(admin.TabularInline):
  )
 
 class ArticleAdmin(admin.ModelAdmin):
- list_display = ('title', 'pub_date', 'slug', 'main_page')
+ list_display = ('title', 'pub_date', 'category', 'slug', 'main_page')
  inlines = [ArticleImageInline]
  multiupload_form = True
  multiupload_list = False
@@ -39,7 +39,7 @@ class ArticleAdmin(admin.ModelAdmin):
   }),
  ((u'Додатково'), {
   'classes': ('grp-collapse grp-closed',),
-  'fields': ('slug',),
+  'fields': ('slug','category'),
  }),
  )
 

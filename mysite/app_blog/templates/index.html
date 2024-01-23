@@ -1,11 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Blog</title>
+ <title>Blog</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style>
+  body {
+    background-color: #f0f0f0;
+  }
+
+  header {
+    background-color: #fff; 
+  }
+
+  .category-list {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .article-list {
+    display: none;
+  }
+</style>
 </head>
 <body>
-    <h1 align="center">Home page</h1>
+<header>
+  <a href="{% url 'home' %}">
+    <h1>Все про час та годинники</h1>
+  </a>
+</header>
+<h2>Категорії:</h2>
+{% if categories %}
+<ul class="category-list">
+{% for item in categories %}
+  <li>
+    <a href="{{ item.get_absolute_url }}">
+      <h3>
+        {{ item.category }}
+      </h3>
+    </a>
+    <ul class="article-list">
+      {% for article in item.articles.all %}
+        <li>
+          <a href="{{ article.get_absolute_url }}">
+            <h4>{{ article.title }}</h4>
+          </a>
+          <p>{{ article.pub_date|date:"j E Y"|safe|linebreaks }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+<a href="{% url 'articles-list' %}">
+  <h4>Всі публікації</h4>
+</a>
+<script>
+  const categoryLinks = document.querySelectorAll('.category-list a');
+  categoryLinks.forEach(link => {
+    link.addEventListener('mouseover', () => {
+      const articleList = link.nextElementSibling;
+      articleList.style.display = 'block';
+    });
+    link.addEventListener('mouseout', () => {
+      const articleList = link.nextElementSibling;
+      articleList.style.display = 'none';
+    });
+  });
+</script>
 </body>
 </html>

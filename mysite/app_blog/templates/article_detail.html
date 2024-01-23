@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>{{ item.title }}</title>
+ <style>
+   .article-images img {
+     max-height: 45vh; 
+   }
+ </style>
+</head>
+<body>
+<header>
+<a href="{% url 'home' %}">
+    <h1>Все про час та годинники</h1>
+  </a>
+ <a href="{% url 'home' %}">
+    <h3>Головна сторінка</h3>
+  </a>
+<a href="{% url 'articles-list' %}">
+    <h3>Публікації</h3>
+  </a>	
+</header>
+{% load static %}
+<div class="container">
+ <div class="article-category">
+   <a href="{{ item.category.get_absolute_url }}"><h3>{{ item.category }}</h3></a>
+ </div>
+  <div class="article">
+    <h2>{{ item.title }}</h2>
+    <p class="article-meta">
+      {{ item.pub_date|date:"d E Y"|safe|linebreaks }}
+    </p>
+    <div class="article-content">
+      {{ item.description|safe }}
+    </div>
+
+    {% if item.images.all %}
+    <div class="article-images">
+      {% for image in item.images.all %}
+        <img src="{{ image.image.url }}" alt="{{ image.title }}" />
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>
